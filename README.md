@@ -1,6 +1,7 @@
 # warp-websocket
-Rust WebSocket connection
-Connect to the binance WebSocket and stream the bid / ask prices and size for luna-usdt and luna-btc.
+Rust WebSocket connection to the binance WebSocket
+
+Stream the bid / ask prices and size for luna-usdt and luna-btc trading pairs.
 
 Run the server with `cargo run` from the command line
 
