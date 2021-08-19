@@ -49,40 +49,11 @@ pub async fn client_connection(ws: WebSocket, clients: Clients) {
                 println!("error receiving message for id {}): {}", uuid.clone(), e);
                 break;
             }
-        };
-         // Process client message via 'client_msg' function below
-	 client_msg(&uuid, msg, &clients).await;
+        };    
     }
+ 
     // Break the loop when client disconnects
     // Remove the client ID from clients HashMap
     clients.lock().await.remove(&uuid);
     println!("{} disconnected", uuid);
-}
-
-// Handles the client messages
-// Replies with pong if client sends ping
-async fn client_msg(client_id: &str, msg: Message, clients: &Clients) {
-    println!("received message from {}: {:?}", client_id, msg);
-
-    // Convert message to a str
-    let message = match msg.to_str() {
-        Ok(v) => v,
-        Err(_) => return,
-    };
-
-    if message == "ping" || message == "ping\n" {
-        let locked = clients.lock().await;
-	// Get the client_id from the clients HashMap
-        match locked.get(client_id) {
-            Some(v) => {
-                if let Some(sender) = &v.sender {
-                    println!("sending pong");
-		    // Use 'sender' from the instantiated 'Client' struct to send "Pong" back to client  
-                    let _ = sender.send(Ok(Message::text("pong")));
-                }
-            }
-            None => return,
-        }
-        return;
-    };
 }
